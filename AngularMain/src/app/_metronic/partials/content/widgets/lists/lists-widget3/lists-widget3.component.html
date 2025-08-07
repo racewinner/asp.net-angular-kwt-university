@@ -1,0 +1,62 @@
+<!-- begin::Header -->
+<div class="card-header border-0">
+  <h3 class="card-title fw-bolder text-dark">Todo</h3>
+  <div class="card-toolbar">
+    <!-- begin::Menu -->
+    <button
+      type="button"
+      class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
+      data-kt-menu-trigger="click"
+      data-kt-menu-placement="bottom-end"
+      data-kt-menu-flip="top-end"
+    >
+      <span
+        [inlineSVG]="'assets/media/icons/duotune/general/gen024.svg'"
+        class="svg-icon svg-icon-2"
+      ></span>
+    </button>
+    <app-dropdown-menu1></app-dropdown-menu1>
+    <!-- end::Menu -->
+  </div>
+</div>
+<!-- end::Header -->
+<!-- begin::Body -->
+<div class="card-body pt-2">
+  <!-- begin::Item -->
+  <div *ngFor="let item of todoData; let i = index" class="d-flex align-items-center mb-8">
+    <!-- begin::Bullet -->
+    <span class="bullet bullet-vertical h-40px"
+    [ngClass]="{'bg-primary': (i % 4) === 0,
+    'bg-success': (i % 4) === 1,
+    'bg-danger': (i % 4) === 2,
+    'bg-warning': (i % 4) === 3}"></span>
+    <!-- end::Bullet -->
+    <!-- begin::Checkbox -->
+    <div class="form-check form-check-custom form-check-solid mx-5">
+      <input class="form-check-input" type="checkbox" value="" />
+    </div>
+    <!-- end::Checkbox -->
+    <!-- begin::Description -->
+    <div class="flex-grow-1">
+      <a href="#" class="text-gray-800 text-hover-primary fw-bolder fs-6"
+      [ngClass]="{'text-hover-primary': (i % 4) === 0,
+      'text-hover-success': (i % 4) === 1,
+      'text-hover-danger': (i % 4) === 2,
+      'text-hover-warning': (i % 4) === 3}">
+      {{lang== 'en' ? item.serviceTypeEnglish : item.serviceTypeArabic}}
+      </a>
+      <span class="text-muted fw-bold d-block">
+        {{lang== 'en' ? item.servicesSubTypeEnglish : item.servicesSubTypeArabic}}
+        {{onFormatTime(item.recordCreated_Time)}}
+      </span>
+    </div>
+    <!-- end::Description -->
+    <span class="badge badge-light-primary fs-8 fw-bolder"
+    [ngClass]="{'badge-light-primary': (i % 4) === 0,
+    'badge-light-success': (i % 4) === 1,
+    'badge-light-danger': (i % 4) === 2,
+    'badge-light-warning': (i % 4) === 3}">{{lang== 'en' ? item.employeeEnglishName : item.employeeArabicName}}</span>
+  </div>
+  <!-- end:Item -->
+</div>
+<!-- end::Body -->

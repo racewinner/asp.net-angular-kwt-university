@@ -1,0 +1,58 @@
+
+<!-- begin::Header -->
+<div class="card-header border-0">
+  <h3 class="card-title fw-bolder text-dark">Employee Performance</h3>
+  <div class="card-toolbar">
+    <!-- begin::Menu -->
+    <button type="button" class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
+      data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">
+      <span [inlineSVG]="'assets/media/icons/duotune/general/gen024.svg'" class="svg-icon svg-icon-2"></span>
+    </button>
+    <app-dropdown-menu1></app-dropdown-menu1>
+    <!-- end::Menu -->
+  </div>
+</div>
+<!-- end::Header -->
+<!-- begin::Body -->
+<!-- begin::Body -->
+<div class="card-body pt-0" *ngIf="employeePerformanceData && employeePerformanceData.employees">
+  <div class="d-flex align-items-center mb-4" *ngFor="let item of employeePerformanceData.employees" (click)="open(employeePerformanceModal)">
+    <div class="flex-grow-1">
+      <span class="text-muted d-block fw-bold" lang="AR-SA" style="font-family: Tahoma, sans-serif;"> {{ item.firstName }} {{item.lastName}} {{ item.loginId }}</span>
+    </div>
+    <!-- end::Text -->
+  </div>
+</div>
+<!-- end::Body -->
+
+<!-- end::Body -->
+
+<ng-template #employeePerformanceModal let-modal>
+  <div class="modal-header bg-light">
+    <button type="button" class="close" data-dismiss="modal" (click)="modal.dismiss('Cross click')">&times;</button>
+    <h4 class="modal-title" id="modal-basic-title">Employee Performance</h4>
+  </div>
+  <div class="modal-body">
+    <!-- end::Header-->
+    <!-- begin::Body-->
+    <div class="card-body pt-5">
+      <div class="timeline-label" *ngFor="let item of employeePerformanceDetail">
+        <div class="timeline-item">
+          <div class="fw-bolder text-gray-800">{{ item.dateFormatted }}</div>
+          <!-- end::Label-->
+          <div class="fw-mormal timeline-content text-muted" style="padding-left: 8px !important;">
+            {{item.myLabel1}}
+          </div>
+        </div>
+        <!-- end::Text -->
+      </div>
+      <!-- end::Timeline-->
+    </div>
+    <!-- end: Card Body-->
+  </div>
+  <div class="modal-footer bg-light">
+    <div class="btn-group" role="group" aria-label="Basic example">
+      <button type="button" class="btn btn-warning" (click)="modal.close('Save click')">Close</button>
+    </div>
+  </div>
+</ng-template>

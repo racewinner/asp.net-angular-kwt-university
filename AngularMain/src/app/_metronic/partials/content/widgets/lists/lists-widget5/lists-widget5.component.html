@@ -1,0 +1,63 @@
+<!-- begin::Header-->
+<div class="card-header align-items-center border-0 mt-4">
+  <h3 class="card-title align-items-start flex-column">
+    <span class="fw-bolder mb-2 text-dark">New Subscriber</span>
+    <span class="text-muted fw-bold fs-7">{{newSubscriberDashBoardModel?.length}}</span>
+  </h3>
+  <div class="card-toolbar" style="position: relative;">
+    <!-- begin::Menu-->
+    <button
+      type="button"
+      class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
+      data-kt-menu-trigger="click"
+      data-kt-menu-placement="bottom-end"
+      data-kt-menu-flip="top-end"
+      (click)="toggleDropdown()"
+      #toggleYearMonthSelectButton
+    >
+      <span
+        [inlineSVG]="'assets/media/icons/duotune/general/gen024.svg'"
+        class="svg-icon svg-icon-2"
+      ></span>
+    </button>
+    <year-month-selector
+    [buttonRef]="buttonRef"
+    style="position: absolute; right: 0; top: 105%;"
+    (selected)="onMonthYearSelect($event)"
+    (close)="isShowYearMonthSelection = false"
+    [ngClass]="{'show': isShowYearMonthSelection === true}"></year-month-selector>
+    <!-- end::Menu-->
+  </div>
+</div>
+<!-- end::Header-->
+<!-- begin::Body-->
+<div class="card-body pt-5">
+  <!-- begin::Timeline-->
+  <div class="timeline-label">
+    <!-- begin::Item-->
+    <div  *ngFor="let item of newSubscriberDashBoardModel" class="timeline-item" style="gap: 3px;">
+      <!-- begin::Label-->
+      <div class="fw-bolder text-gray-800 fs-6">{{onFormatTime(item.transdate)}}</div>
+      <!-- end::Label-->
+      <!-- begin::Badge-->
+      <div class="timeline-badge">
+        <i class="fa fa-genderless fs-1" [ngClass]="{
+          'text-warning': item.serviceStatustatusId === 0,
+          'text-success': item.serviceStatustatusId === 1,
+          'text-danger': item.serviceStatustatusId === 2,
+          'text-primary': item.serviceStatustatusId === 3
+        }"></i>
+      </div>
+      <!-- end::Badge-->
+      <!-- begin::Text-->
+      <div class="fw-mormal timeline-content text-muted ps-3">
+        {{lang== 'en' ? item.departmentEnglish : item.departmentArabic}}
+        <a href="#" class="text-primary">{{lang== 'en' ? item.employeeEnglishName : item.employeeArabicName}}</a>
+      </div>
+      <!-- end::Text-->
+    </div>
+    <!-- end::Item-->
+  </div>
+  <!-- end::Timeline-->
+</div>
+<!-- end: Card Body-->

@@ -1,0 +1,136 @@
+<input type="hidden" #DocumentAttachments name="DocumentAttachments" value="DocumentAttachments">
+<ngb-accordion #acc="ngbAccordion" class="mb-2" activeIds="ngb-panel-0"
+    [ngClass]="{'documentAccordian': documentAccordialDetails  === 'ServiceFinanceAccordian'}">
+    <ngb-panel>
+        <ng-template ngbPanelTitle>
+            <h3 class="m-0 ArFontStyle" lang="AR-SA" id="DocumentAttachments">{{ lang == 'en' ? formBodyLabels.en.hdrDocAttachment.title : formBodyLabels.ar.hdrDocAttachment.title}}</h3>
+        </ng-template>
+        <ng-template ngbPanelContent>
+            <div class="row gx-9 gy-6">
+                <form autocomplete="off" [formGroup]="getForm">
+                    <div class="row">
+                        <div class="col-lg-4 fv-row">
+                            <label class="col-form-label fw-bold fs-6 ArFontStyle" lang="AR-SA">{{ lang == 'en' ? formBodyLabels.en.lblCreatedDate.title : formBodyLabels.ar.lblCreatedDate.title}}</label>
+                            <input type="text" class="form-control form-control-lg  mb-3 mb-lg-0" 
+                            formControlName="createdDate" readonly />
+                        </div>
+                        <div class="col-lg-4 fv-row">
+                            <label class="col-form-label fw-bold fs-6 ArFontStyle" lang="AR-SA">{{ lang == 'en' ? formBodyLabels.en.lblAttachId.title : formBodyLabels.ar.lblAttachId.title}}</label>
+                            <input type="text" class="form-control form-control-lg  mb-3 mb-lg-0" 
+                            formControlName="attachId" readonly />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 fv-row">
+                            <label class="col-form-label fw-bold fs-6 ArFontStyle" lang="AR-SA">{{ lang == 'en' ? formBodyLabels.en.lblSubject.title : formBodyLabels.ar.lblSubject.title}}</label>
+                            <input type="text" class="form-control form-control-lg  mb-3 mb-lg-0"
+                                formControlName="subject" />
+                        </div>
+                        <div class="col-lg-4 fv-row">
+                            <label class="col-form-label fw-bold fs-6 ArFontStyle" lang="AR-SA">{{ lang == 'en' ? formBodyLabels.en.lblRemarks.title : formBodyLabels.ar.lblRemarks.title}}</label>
+                            <input type="text" class="form-control form-control-lg  mb-3 mb-lg-0"
+                                formControlName="attachmentRemarks" />
+                        </div>
+                        <div class="col-lg-4 fv-row">
+                            <label class="col-form-label fw-bold fs-6 ArFontStyle" lang="AR-SA">{{ lang == 'en' ? formBodyLabels.en.lblMetaTag.title : formBodyLabels.ar.lblMetaTag.title}}</label>
+                            <mat-form-field class="example-chip-list" appearance="outline" formGroupName="mtag">
+                                <mat-chip-list #chipList aria-label="Fruit selection">
+                                    <mat-chip *ngFor="let fruit of metaTag" [selectable]="selectable"
+                                        [removable]="removable" (removed)="remove(fruit)">
+                                        {{fruit}}
+                                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                    </mat-chip>
+                                    <input #fruitInput [matAutocomplete]="auto" [matChipInputFor]="chipList"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                        [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
+                                </mat-chip-list>
+                                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="current-document row mt-4" *ngFor="let currentDoc of currentDocuments; let i=index">
+                    <div class="col-lg-5 fv-row">
+                        <label for="formFile" class="form-label ArFontStyle" lang="AR-SA">{{ lang == 'en' ? formBodyLabels.en.lblSelectDocTyp.title : formBodyLabels.ar.lblSelectDocTyp.title}}</label>
+                        <ng-select [(ngModel)]="currentDoc.documentType" lang="AR-SA" [disabled]="true">
+                            <ng-option *ngFor="let item of selectDocTypeDto" [value]="item.refId">{{item.shortname}}</ng-option>
+                        </ng-select>                            
+                    </div>
+                    <div class="col-lg-7 fv-row d-flex align-items-end">
+                        <div class="flex-fluid d-flex">
+                            <div class="border border-secondary rounded p-3 w-100" style="height: 43px;">
+                                <a [href]="getDocumentUrl(currentDoc)" target="_blank">{{ currentDoc.attachmentByName }}</a>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-remove me-2" (mousedown)="onRemoveCurrentDocument(i)"> - </button>
+                    </div>
+                </div>
+
+                <div class="new-document row mt-4" *ngFor="let newDoc of newDocuments; let i=index">
+                    <div class="col-lg-5 fv-row">
+                        <label for="formFile" class="form-label ArFontStyle" lang="AR-SA">{{ lang == 'en' ? formBodyLabels.en.lblSelectDocTyp.title : formBodyLabels.ar.lblSelectDocTyp.title}}</label>
+                        <ng-select [(ngModel)]="newDoc.type" lang="AR-SA" [disabled]="true">
+                            <ng-option *ngFor="let item of selectDocTypeDto" [value]="item.refId">{{item.shortname}}</ng-option>
+                        </ng-select>                            
+                    </div>
+                    <div class="col-lg-7 fv-row d-flex align-items-end">
+                        <div class="flex-fluid d-flex">
+                            <div class="border border-secondary rounded p-3 w-100" style="height: 43px;">
+                                {{ newDoc.file.name }}
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-remove me-2" (mousedown)="onRemoveNewDocument(i)"> - </button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-5 fv-row">
+                        <div class="mt-4">
+                            <label for="formFile" class="form-label ArFontStyle" lang="AR-SA">{{ lang == 'en' ? formBodyLabels.en.lblSelectDocTyp.title : formBodyLabels.ar.lblSelectDocTyp.title}}</label>
+                            <ng-template [ngIf]="shouldAddApplicantDoc() == true">
+                                <ng-select [(ngModel)]="newDocumentFileType" lang="AR-SA">
+                                    <ng-option *ngFor="let item of ApplicantDoc" [value]="item.refId">{{item.shortname}}</ng-option>
+                                </ng-select>                                
+                            </ng-template>
+                            <ng-template [ngIf]="shouldAddApplicantDoc() == false">
+                                <ng-select [(ngModel)]="newDocumentFileType" lang="AR-SA">
+                                    <ng-option *ngFor="let item of selectDocTypeDto" [value]="item.refId">{{item.shortname}}</ng-option>
+                                </ng-select>
+                            </ng-template>
+                        </div>
+                    </div>
+                    <div class="col-lg-7 fv-row d-flex align-items-end">
+                        <input #addFile type="file" 
+                                class="form-control form-control-lg  mb-3 mb-lg-0"
+                                [accept]="shouldAddApplicantDoc() ? 'image/png, image/jpeg' : 'All/*'"
+                                [hidden]="true" (change)="onNewDocumentSelected($event)" title="testing" />
+                        <div class="flex-fluid d-flex">
+                            <button class="btn btn-sm btn-upload" (mousedown)="addFile.click()">Choose
+                                file</button>
+                            <div class="border border-secondary rounded p-3 w-100" style="height: 43px;">
+                                {{newDocumentFile ? newDocumentFile.name : "No file choosen"}}
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-add me-2" (mousedown)="addNewDocument()"> + </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 fv-row">
+                        <div class="mt-4">
+                            <button type="button"
+                                class="btn btn-success float-left ArFontStyle dark-sea-green"
+                                lang="AR-SA" (click)="saveDocumentAttachements()"
+                                [disabled]="!mytransid || !isEditable"
+                            >
+                                {{ lang == 'en' ? "Save Documents" :"Save Documents"}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </ngb-panel>
+</ngb-accordion>
